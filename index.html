@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Student Data Analytics System</title>
+  <meta name="description" content="College Mini Project on Secure Data Science: Client-Side Student Performance Analytics with Zero-Knowledge Privacy Masking and AES-256-GCM Encryption.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="theme-navy">
+  <!-- Top Privacy Notification Bar -->
+  <aside class="privacy-banner" role="region" aria-label="Privacy Assurance">
+    <div class="banner-content">
+      <span class="shield-badge">🛡️ Zero Data Transmission</span>
+      <p class="banner-text">All academic data parsing, privacy masking, and AES-256 encryption occur strictly inside your local browser runtime via Web Crypto API. No student records ever leave this device.</p>
+    </div>
+  </aside>
+
+  <!-- ================= AUTH VIEW ================= -->
+  <section id="authView" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="app-brand-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <h1 class="auth-title">Secure Student Analytics</h1>
+        <p class="auth-subtitle">Secure Data Science Mini Project · Academic & Performance Portal</p>
+      </div>
+
+      <div class="security-tag-row">
+        <span class="security-pill">🔐 Web Crypto API</span>
+        <span class="security-pill">🛡️ Client-Side Masking</span>
+        <span class="security-pill">⚡ AES-256-GCM</span>
+      </div>
+
+      <form id="loginForm" class="auth-form" onsubmit="return false;">
+        <div class="form-group">
+          <label for="username">Faculty / Officer Username</label>
+          <div class="input-container">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input type="text" id="username" class="form-control" placeholder="Enter username (e.g. admin or faculty)" value="faculty.analyst" autocomplete="username" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Security Passphrase</label>
+          <div class="input-container">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="password" class="form-control" placeholder="Enter password" value="SecureProject@2024" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        <div class="demo-auth-notice">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span><strong>Educational Demo Authentication:</strong> Pre-filled credentials demonstrate RBAC session authorization. Production implementations pair with SAML/OIDC federated identity providers.</span>
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn btn-primary btn-block">
+          <span>Authenticate & Access Portal</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>College Mini Project · Subject: <strong>Secure Data Science</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN DASHBOARD APP ================= -->
+  <div id="appContainer" class="app-layout hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-title">SecureAnalytics</span>
+            <span class="brand-sub">SDS Mini-Project</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="overview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <span>Executive Overview</span>
+        </button>
+
+        <button class="nav-item" data-tab="dataManagement">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+          <span>Student Records</span>
+        </button>
+
+        <button class="nav-item" data-tab="security">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Cryptographic Engine</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="session-user-badge">
+          <div class="user-avatar">FA</div>
+          <div class="user-details">
+            <span class="user-name" id="sessionUsername">faculty.analyst</span>
+            <span class="user-role">Role: Academic Analyst</span>
+          </div>
+        </div>
+        <button id="logoutBtn" class="btn btn-outline-danger btn-sm btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top App Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebarToggle" class="mobile-toggle-btn" aria-label="Toggle Sidebar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <div>
+            <h2 id="viewHeading" class="view-title">Executive Academic Dashboard</h2>
+            <p class="view-subtitle">Zero-Knowledge Student Analytics with Client-Side Masking & AES-256-GCM Export</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="privacy-status-chip">
+            <span class="pulse-indicator"></span>
+            <span>Local Enclave: Active</span>
+          </div>
+          <button id="loadSampleBtn" class="btn btn-outline-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Load Sample Data</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-scroll">
+        <!-- ================= TAB 1: OVERVIEW ================= -->
+        <section id="overviewTab" class="tab-pane active">
+          <!-- Upload Dropzone Card -->
+          <div class="card upload-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Dataset Ingestion & Client-Side PII Cleansing</h3>
+                <p>Upload student CSV records for zero-transmission in-browser processing</p>
+              </div>
+              <div class="file-spec-tag">Accepts: .csv (Max 10 MB)</div>
+            </div>
+            <div class="card-body">
+              <div id="dropZone" class="drop-zone">
+                <input type="file" id="csvFileInput" accept=".csv,text/csv" class="file-input-hidden">
+                <div class="drop-zone-icon">
+                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="18" x2="12" y2="12"/>
+                    <polyline points="9 15 12 12 15 15"/>
+                  </svg>
+                </div>
+                <h4 class="drop-title">Drag & drop student CSV file here</h4>
+                <p class="drop-sub">or <button type="button" id="browseFileBtn" class="link-btn">browse your computer</button> to upload</p>
+                <div class="drop-security-note">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <span>Processed strictly inside memory. No server uploads occur.</span>
+                </div>
+              </div>
+
+              <div id="fileStatusBanner" class="file-status-banner hidden">
+                <div class="status-left">
+                  <span class="file-icon">📄</span>
+                  <div>
+                    <span id="loadedFileName" class="loaded-file-name">sample-students.csv</span>
+                    <span id="loadedFileMeta" class="loaded-file-meta">25 records · 1.4 KB · Integrity Verified</span>
+                  </div>
+                </div>
+                <div class="status-right">
+                  <span class="badge badge-success">Masking Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Metrics KPI Grid -->
+          <div class="metrics-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Total Student Records</span>
+                <span class="kpi-icon icon-blue">👥</span>
+              </div>
+              <div class="kpi-value" id="kpiTotalStudents">0</div>
+              <div class="kpi-footnote">Cleaned & Anonymized</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Average Marks</span>
+                <span class="kpi-icon icon-emerald">📊</span>
+              </div>
+              <div class="kpi-value" id="kpiAverageMarks">0.0%</div>
+              <div class="kpi-footnote" id="kpiMarksSpread">Range: 0 - 0</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Average Attendance</span>
+                <span class="kpi-icon icon-cyan">📅</span>
+              </div>
+              <div class="kpi-value" id="kpiAverageAttendance">0.0%</div>
+              <div class="kpi-footnote" id="kpiAttendanceSpread">Standard Min Threshold: 75%</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Distinction Ratio</span>
+                <span class="kpi-icon icon-amber">⭐</span>
+              </div>
+              <div class="kpi-value" id="kpiDistinctionRate">0.0%</div>
+              <div class="kpi-footnote" id="kpiDistinctionCount">0 Students ≥ 85% Marks</div>
+            </div>
+          </div>
+
+          <!-- Interactive Visual Analytics Charts Grid -->
+          <div class="charts-grid">
+            <div class="card chart-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Academic Performance Classification</h3>
+                  <p>Distribution across Distinctions, Honors, Passes, and Intervention</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="performanceChart" width="480" height="260"></canvas>
+                </div>
+                <div id="performanceLegend" class="custom-legend"></div>
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Attendance Compliance Distribution</h3>
+                  <p>Students categorized by regulatory attendance tiers</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="attendanceChart" width="480" height="260"></canvas>
+                </div>
+                <div id="attendanceLegend" class="custom-legend"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Correlation & Insight Banner -->
+          <div class="card insight-card">
+            <div class="insight-header">
+              <span class="insight-badge">💡 Secure Statistical Insight</span>
+              <h4>Academic Correlation & Risk Factor Analysis</h4>
+            </div>
+            <div class="insight-body">
+              <div class="insight-stat">
+                <span class="insight-stat-num" id="insightPassingRate">0%</span>
+                <span class="insight-stat-desc">Overall Pass Percentage</span>
+              </div>
+              <div class="insight-divider"></div>
+              <div class="insight-stat">
+                <span class="insight-stat-num" id="insightAtRiskCount">0</span>
+                <span class="insight-stat-desc">Students Flagged for Academic Intervention</span>
+              </div>
+              <div class="insight-divider"></div>
+              <div class="insight-text">
+                <p id="insightNarrative">Upload a dataset or load the sample records to generate real-time correlation analytics comparing student attendance with academic marks.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 2: DATA MANAGEMENT & MASKING ================= -->
+        <section id="dataManagementTab" class="tab-pane">
+          <div class="card">
+            <div class="card-header flex-between">
+              <div>
+                <h3>Student Ledger & Privacy Enclave</h3>
+                <p>Sensitive Personally Identifiable Information (PII) is automatically masked</p>
+              </div>
+              <div class="table-actions">
+                <div class="toggle-control">
+                  <label class="switch">
+                    <input type="checkbox" id="maskToggle" checked>
+                    <span class="slider round"></span>
+                  </label>
+                  <span class="toggle-label" id="maskToggleLabel">Privacy Masking: <strong>ON</strong></span>
+                </div>
+                <button id="downloadAnonymizedCsvBtn" class="btn btn-outline-primary btn-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  <span>Export Anonymized CSV</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter and search toolbar -->
+            <div class="table-toolbar">
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="tableSearch" placeholder="Filter by ID, Tier, Marks..." class="table-search-input">
+              </div>
+
+              <div class="filter-group">
+                <select id="tierFilter" class="table-select">
+                  <option value="ALL">All Performance Tiers</option>
+                  <option value="Distinction">Distinction (≥ 85%)</option>
+                  <option value="First Class">First Class (70-84%)</option>
+                  <option value="Second Class">Second Class (50-69%)</option>
+                  <option value="Needs Intervention">Intervention (&lt; 50%)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Ledger Table -->
+            <div class="table-responsive">
+              <table class="data-table" id="studentTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Masked Identifier (PII)</th>
+                    <th>Anonymized Email</th>
+                    <th>Redacted Phone</th>
+                    <th>Student ID</th>
+                    <th>Marks</th>
+                    <th>Attendance</th>
+                    <th>Performance Tier</th>
+                    <th>Compliance</th>
+                  </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                  <tr>
+                    <td colspan="9" class="text-center text-muted py-5">
+                      No dataset loaded. Click <strong>"Load Sample Data"</strong> or drag-and-drop a CSV file above.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer flex-between">
+              <span id="tableRecordCount" class="text-muted text-sm">Showing 0 of 0 records</span>
+              <div class="mask-legend">
+                <span class="legend-badge"><code>***</code> = SHA-256 / Regex Masked Field</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 3: CRYPTOGRAPHIC ENGINE ================= -->
+        <section id="securityTab" class="tab-pane">
+          <div class="grid-2col">
+            <!-- AES-256-GCM Secure Export Card -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>AES-256-GCM Cryptographic Export</h3>
+                  <p>Hardware-accelerated authenticated client-side encryption via Web Crypto API</p>
+                </div>
+                <span class="badge badge-indigo">NIST Recommended</span>
+              </div>
+              <div class="card-body">
+                <p class="section-desc">Encrypt the sanitized student ledger using military-grade <strong>AES-GCM (256-bit key)</strong> derived via <strong>PBKDF2 with SHA-256 (100,000 iterations)</strong> and a random 12-byte initialization vector (IV).</p>
+
+                <div class="crypto-form">
+                  <div class="form-group">
+                    <label for="exportPassphrase">Encryption Passphrase</label>
+                    <div class="input-container">
+                      <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                      </svg>
+                      <input type="password" id="exportPassphrase" class="form-control" placeholder="Enter a strong passphrase to encrypt" value="SDS-Capstone-SecureKey!2024">
+                    </div>
+                  </div>
+
+                  <div class="crypto-details-box">
+                    <div class="crypto-spec-row">
+                      <span>Cipher Algorithm:</span>
+                      <strong>AES-GCM (256-bit)</strong>
+                    </div>
+                    <div class="crypto-spec-row">
+                      <span>Key Derivation:</span>
+                      <strong>PBKDF2-HMAC-SHA256 (100,000 rounds)</strong>
+                    </div>
+                    <div class="crypto-spec-row">
+                      <span>Nonce / IV:</span>
+                      <strong>96-bit (12 bytes) Cryptographically Secure CSPRNG</strong>
+                    </div>
+                    <div class="crypto-spec-row">
+                      <span>Integrity Authentication:</span>
+                      <strong>128-bit Authentication Tag</strong>
+                    </div>
+                  </div>
+
+                  <button id="encryptExportBtn" class="btn btn-primary btn-block">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <span>Encrypt & Download Secure Package (.enc.json)</span>
+                  </button>
+
+                  <!-- Encryption Status Output -->
+                  <div id="encryptionResultBox" class="encryption-output hidden">
+                    <h5>✅ Cryptographic Package Generated</h5>
+                    <pre id="encryptionCiphertextPreview" class="code-preview"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy & Security Information Panel -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h3>Secure Data Science Architecture</h3>
+                  <p>Compliance, Zero-Trust principles, and PII protection breakdown</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="security-features-list">
+                  <div class="sec-feature-item">
+                    <div class="sec-feature-icon">🛡️</div>
+                    <div class="sec-feature-content">
+                      <h4>Zero-Knowledge Client Processing</h4>
+                      <p>Uploaded CSV files are read via the HTML5 <code>FileReader</code> API into browser heap memory only. No sockets, fetch endpoints, or third-party analytic telemetry are invoked.</p>
+                    </div>
+                  </div>
+
+                  <div class="sec-feature-item">
+                    <div class="sec-feature-icon">🎭</div>
+                    <div class="sec-feature-content">
+                      <h4>Automated PII Masking & Pseudonymization</h4>
+                      <p>Names, phone numbers, student IDs, and emails undergo immediate regex masking (e.g., <code>Aarav Sharma</code> &rarr; <code>A**** S*****</code>; <code>+91-9876543210</code> &rarr; <code>+91-******3210</code>).</p>
+                    </div>
+                  </div>
+
+                  <div class="sec-feature-item">
+                    <div class="sec-feature-icon">🔑</div>
+                    <div class="sec-feature-content">
+                      <h4>Native Web Crypto API Standard</h4>
+                      <p>Keys are synthesized using browser-native <code>window.crypto.subtle</code> primitives without external NPM libraries, guaranteeing reproducible, audit-friendly cryptography.</p>
+                    </div>
+                  </div>
+
+                  <div class="sec-feature-item">
+                    <div class="sec-feature-icon">⚖️</div>
+                    <div class="sec-feature-content">
+                      <h4>FERPA & GDPR Alignment</h4>
+                      <p>Fulfills the Principle of Data Minimization (Article 5(1)(c) GDPR) and Education Record Redaction (FERPA 34 CFR Part 99).</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Backups & Archives
+*.zip
+*.tar.gz
+
+# Local IDE & Editors
+.vscode/
+.idea/
+*.swp
